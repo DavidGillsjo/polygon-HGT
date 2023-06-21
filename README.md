@@ -2,7 +2,7 @@
 This repo contains code for training and inference of our model for connected polygon detection in RGB images.
 See the [preprint on arXiv]() of "Polygon Detection for Room Layout Estimation using Heterogenous Graphs and Wireframes" for more details.
 
-![From wireframes to polygons](./image/wireframe2polygon.svg)
+![From wireframes to polygons](./image/wireframe2polygon.png)
 
 *Conceptual image of how the model works with wireframes and polyons.*
 
@@ -98,7 +98,7 @@ python3 train.py \
 --config-file ../config-files/Pred-plane-from-GT-GNN.yaml
 ```
 To monitor the training we have used W&B, but there is some support for tensorboard.
-W&B may be configured [here](./parsing/utils/logger.py).
+W&B may be configured [here](./parsing/utils/logger.py#L75).
 
 
 ## Citation
