@@ -38,14 +38,14 @@ source init_env.sh
 
 ## Download Model Weights
 Here you find the pre-trained models to reproduce the result from the paper.
-- [Cycle based model](https://vision.maths.lth.se/davidg-data/srw-net/models/model_proposal_s3d.pth)
-- [Polygon-HGT joint prediction](https://vision.maths.lth.se/davidg-data/srw-net/models/model_gnn_s3d.pth)
-- [Polygon-HGT simulated wireframe](https://vision.maths.lth.se/davidg-data/srw-net/models/model_gnn_s3d.pth)
+- [Cycle based model](https://vision.maths.lth.se/davidg-data/polygon-hgt/model_proposal_s3d.pth)
+- [Polygon-HGT joint prediction](https://vision.maths.lth.se/davidg-data/polygon-hgt/model_gnn_s3d.pth)
+- [Polygon-HGT simulated wireframe](https://vision.maths.lth.se/davidg-data/polygon-hgt/model_gnn_s3d.pth)
 
 You may for example put the model weights in the `data` folder, the rest of this README will assume you did.
 
 ## Generate Annotations
-To generate the annotations, then
+To generate the annotations,
 - Download Structured3D, see [official website](https://structured3d-dataset.org/).
 You may use [this script](data/download_structured3D.py).
 - Run `python3 preprocessing/structured3D2planes_simple.py --help` for instructions.
@@ -104,5 +104,4 @@ W&B may be configured [here](./parsing/utils/logger.py#L75).
 ## Citation
 If you use it in your research, please cite
 ```
-
 ```
