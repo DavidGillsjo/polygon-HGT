@@ -1,0 +1,75 @@
+SOLVER:
+  IMS_PER_BATCH: 8
+  BASE_LR: 0.0004
+  MAX_EPOCH: 40
+  STEPS: (25,)
+  WEIGHT_DECAY: 0.0001
+  CHECKPOINT_PERIOD: 1
+  VAL_PERIOD: 3
+  OPTIMIZER: "ADAM"
+  AMSGRAD: True
+  NUM_GPUS: 1
+
+DATALOADER:
+  NUM_WORKERS: 4
+DATASETS:
+  IMAGE:
+    PIXEL_MEAN: [142.278, 150.265, 154.994]
+    PIXEL_STD: [64.144, 61.237, 59.377]
+    TO_255: True
+
+  TEST: ("structured3D_perspective_planes_test_mini",)
+  VAL: ("structured3D_perspective_planes_val_mini",)
+  TRAIN: ("structured3D_perspective_planes_train",)
+
+
+  LINE_CLASS_TYPE: 'single' #single or multi
+  DISABLE_CLASSES: False #Must be combined with reducing the jlabel head output to 2 instead of 3.
+
+  HFLIP: False
+  VFLIP: False
+
+ENCODER:
+  NUM_STATIC_POS_LINES: 50
+  NUM_STATIC_NEG_LINES: 10
+
+MODEL:
+  NAME: "GT_PLANE_CLASSIFIER"
+  DEVICE: "cuda"
+  PLANE_LABELS: ['invalid', 'wall','floor','ceiling']
+  JUNCTION_LABELS: ['invalid', 'false', 'proper'] # Modfiy jlabel in HEAD_SIZE to match length of this list
+  LINE_LABELS: ['invalid', 'valid']
+  HEAD_SIZE: [[4], [2]] #Order: plane centroid label, plane centroid offset
+  OUT_FEATURE_CHANNELS: 256
+  NEGATIVE_LINE_RATIO: 1.0
+  HGNETS:
+    DEPTH: 4
+    NUM_STACKS: 2
+    NUM_BLOCKS: 1
+    INPLANES: 64
+    NUM_FEATS: 128
+
+  PARSING_HEAD:
+    DIM_LOI: 128
+    DIM_FC: 1024
+
+  PLANE_HEAD:
+    EDGE_VALID_SCORE_THRESHOLD: 0.4
+    TOPK_OUTPUT_PLANES: 30
+    LOSS_WEIGHTS:  [0.91,  1.52, 12.44,  6.22] # Assuming distribution [5, 2.99, 0.37, 0.73]
+    STRATEGY: "polygon_sampling"
+    NMS_IOU_THRESHOLD: 0.2
+    #CENTROID_LOSS_WEIGHTS: [ 0.9, 3.33047755, 23.53967888, 12.15727398] # Assuming distribution [128^2, 2.99, 0.37, 0.73] and effective sample with beta=0.9
+
+
+  LOSS_WEIGHTS:
+    loss_plane_pos: 0.1
+    loss_plane_neg: 0.1
+    loss_pc_label: 1.0
+    loss_pc_off: 0.25
+
+
+OUTPUT_DIR: "../runs" # Relative script dir
+SCORE_THRESHOLD: 0.6
+LINE_NMS_THRESHOLD: 0
+GRAPH_NMS: False

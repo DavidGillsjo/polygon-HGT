@@ -1,0 +1,6 @@
+[submodule "libs/dockers"]
+	path = libs/dockers
+	url = git@github.com:DavidGillsjo/dockers.git
+[submodule "libs/Structured3D"]
+	path = libs/Structured3D
+	url = git@github.com:bertjiazheng/Structured3D.git
