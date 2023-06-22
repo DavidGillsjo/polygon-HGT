@@ -1,6 +1,6 @@
 # Polygon Detection for Room Layout Estimation using Heterogenous Graphs and Wireframes
 This repo contains code for training and inference of our model for connected polygon detection in RGB images.
-See the [preprint on arXiv]() of "Polygon Detection for Room Layout Estimation using Heterogenous Graphs and Wireframes" for more details.
+See the [paper on arXiv](https://arxiv.org/abs/2306.12203) titled "Polygon Detection for Room Layout Estimation using Heterogenous Graphs and Wireframes" for more details.
 
 ![From wireframes to polygons](./image/wireframe2polygon.png)
 
@@ -104,4 +104,12 @@ W&B may be configured [here](./parsing/utils/logger.py#L75).
 ## Citation
 If you use it in your research, please cite
 ```
+@misc{gillsjö2023polygon,
+      title={Polygon Detection for Room Layout Estimation using Heterogeneous Graphs and Wireframes}, 
+      author={David Gillsjö and Gabrielle Flood and Kalle Åström},
+      year={2023},
+      eprint={2306.12203},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
 ```
