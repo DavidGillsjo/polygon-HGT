@@ -38,9 +38,9 @@ source init_env.sh
 
 ## Download Model Weights
 Here you find the pre-trained models to reproduce the result from the paper.
-- [Cycle based model](https://vision.maths.lth.se/davidg-data/polygon-hgt/model_proposal_s3d.pth)
-- [Polygon-HGT joint prediction](https://vision.maths.lth.se/davidg-data/polygon-hgt/model_gnn_s3d.pth)
-- [Polygon-HGT simulated wireframe](https://vision.maths.lth.se/davidg-data/polygon-hgt/model_gnn_s3d.pth)
+- [Cycle based simulated wireframe](https://vision.maths.lth.se/davidg-data/polygon-hgt/model_cycle_proposal.pth)
+- [Polygon-HGT simulated wireframe](https://vision.maths.lth.se/davidg-data/polygon-hgt/model_sim_hgt.pth)
+- [Polygon-HGT joint prediction](https://vision.maths.lth.se/davidg-data/polygon-hgt/model_joint_hgt.pth)
 
 You may for example put the model weights in the `data` folder, the rest of this README will assume you did.
 
