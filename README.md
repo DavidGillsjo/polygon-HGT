@@ -87,8 +87,8 @@ The different models are trained with their respective config file which exists 
 The config files are placed in the folder `config-files`.
 | Model / Variant | Simulated wireframe     | Joint detection           |
 | -------------   | -------------           | -------------             |
-| Cycle based     | Pred-plane-from-GT      | Pred-simple-plane-S3D     |
-| Polygon-HGT     | Pred-plane-from-GT-GNN  | Pred-simple-plane-S3D-GNN |
+| **Cycle based** | Pred-plane-from-GT      | Pred-simple-plane-S3D     |
+| **Polygon-HGT** | Pred-plane-from-GT-GNN  | Pred-simple-plane-S3D-GNN |
 
 
 ### Train Polygon-HGT wit simulated wireframes
