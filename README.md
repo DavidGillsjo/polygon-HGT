@@ -18,6 +18,12 @@ git submodule init
 git submodule update
 ```
 
+## Prerequisites
+To run the code you need an NVIDIA GPU with their driver installed.
+Furthermore you need to install docker and gpu support for docker with nvidia container toolkit.
+[[Link to docker install](https://docs.docker.com/engine/install/)]
+[[Link to nvidia container toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)]
+
 ## Docker
 We supply a [Dockerfile](docker_cuspatial/Dockerfile) to build a docker image which can run the code.
 First, modify [line 7](docker_cuspatial/Dockerfile#L7) so that `gpu_arch` matches your GPU architecture. See for example [this blog post](https://arnon.dk/matching-sm-architectures-arch-and-gencode-for-various-nvidia-cards/) to find your arch code.
@@ -25,10 +31,24 @@ First, modify [line 7](docker_cuspatial/Dockerfile#L7) so that `gpu_arch` matche
 Then build and run:
 ```
 cd docker_cuspatial
-./build_docker.sh
-./run_docker.sh
+./build.sh
+./run.sh
 ```
 You will find your `HOME` directory mounted to `/host_home`.
+If you require `sudo` to run docker, set environment variable `SUDO` like this
+```
+cd docker_cuspatial
+SUDO=1 ./build.sh
+SUDO=1 ./run.sh
+```
+
+If you have problems building you may use the uploaded dockerhub image by running
+```
+cd docker_cuspatial
+./dockerhub_run.sh
+```
+This is not tested and you may run into issues with the environment variable `gpu_arch`.
+Possible workaround is to manually set it prior to compiling the code with `build.sh`.
 
 ## Fix Python path
 Add `parsing` folder to python path for correct imports.
@@ -105,7 +125,7 @@ W&B may be configured [here](./parsing/utils/logger.py#L75).
 If you use it in your research, please cite
 ```
 @misc{gillsjö2023polygon,
-      title={Polygon Detection for Room Layout Estimation using Heterogeneous Graphs and Wireframes}, 
+      title={Polygon Detection for Room Layout Estimation using Heterogeneous Graphs and Wireframes},
       author={David Gillsjö and Gabrielle Flood and Kalle Åström},
       year={2023},
       eprint={2306.12203},
