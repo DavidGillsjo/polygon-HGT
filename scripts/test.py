@@ -54,14 +54,10 @@ class ModelTester:
 
     def __init__(self, cfg, validation = False, output_dir = None, nbr_plots = 5, write_tb = True, write_latex = False, show_legend = True, wandb_run = None, disable_wandb = False, result_queue = None, resume_wandb = False):
         self.cfg = cfg
+        self.validation = validation
         self.output_dir = output_dir if output_dir else cfg.OUTPUT_DIR
         self.plot_dir = osp.join(self.output_dir, 'plots')
         os.makedirs(self.plot_dir, exist_ok=True)
-
-        if 'GNN' in cfg.MODEL.NAME.upper():
-            self.datasets = build_gnn_test_dataset(cfg, validation = validation)
-        else:
-            self.datasets = build_test_dataset(cfg, validation = validation)
 
         self.nbr_plots = nbr_plots
         self.logger = multi_gpu.get_logger()
@@ -104,6 +100,14 @@ class ModelTester:
         # Calculate Plance Centroid sAP if GT plane classifier
         self.calculate_pcap = 'GT_PLANE_CLASSIFIER' == self.cfg.MODEL.NAME.upper()
 
+    
+    @property
+    def datasets(self):
+        if 'GNN' in self.cfg.MODEL.NAME.upper():
+            self.datasets = build_gnn_test_dataset(self.cfg, validation = self.validation)
+        else:
+            self.datasets = build_test_dataset(self.cfg, validation = self.validation)
+    
     def _init_model(self):
         if 'GNN' in self.cfg.MODEL.NAME.upper():
             model = WireframeGNNClassifier(self.cfg)
