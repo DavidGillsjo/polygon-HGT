@@ -139,8 +139,7 @@ class Polygon2MaskIoULossCUDA:
             return
         xy_range = torch.arange(0,128, device = device) + 0.5
         xy = torch.cartesian_prod(xy_range, xy_range)
-        self.points_x = pt2cu(xy[:,1].contiguous())
-        self.points_y = pt2cu(xy[:,0].contiguous())
+        self.points = cs.Geoseries.from_points_xy(pt2cu(xy.flatten().contiguous()))
         self.device = device
 
         if self.loss_weights is not None:
@@ -148,27 +147,24 @@ class Polygon2MaskIoULossCUDA:
 
 
     def _planes_to_vectors(self, planes):
-        points_x = []
-        points_y = []
+        points = []
         ring_offsets = []
         next_offset = 0
         for poly in planes:
-            points_x.append(poly[:,0])
-            points_y.append(poly[:,1])
+            points.append(poly.T.flatten())
             ring_offsets.append(next_offset)
             next_offset += poly.size(0)
 
-        points_x = torch.cat(points_x)
-        points_y = torch.cat(points_y)
+        points = torch.cat(points)
         ring_offsets = torch.tensor(ring_offsets, device = self.device) # Start Idx for each ring in the sequence
         poly_offsets = torch.arange(len(planes), device = self.device) # Assume each polygon has one ring.
 
-        return {
-            'poly_points_x': pt2cu(points_x),
-            'poly_points_y': pt2cu(points_y),
-            'poly_offsets': pt2cu(poly_offsets),
-            'poly_ring_offsets': pt2cu(ring_offsets),
-        }
+        return cs.GeoSeries.from_polygon_xy(
+            pt2cu(points),
+            pt2cu(poly_offsets),
+            pt2cu(poly_offsets),
+            pt2cu(ring_offsets),
+        )
 
 
     def polygons2masks(self, planes):
@@ -178,8 +174,8 @@ class Polygon2MaskIoULossCUDA:
         all_mask_tensor = []
         for s_idx in start_idx:
             e_idx = min(s_idx + 31, len(planes))
-            poly_dict = self._planes_to_vectors(planes[s_idx:e_idx])
-            mask_frame = cs.point_in_polygon(self.points_x, self.points_y, **poly_dict)
+            cu_polygons = self._planes_to_vectors(planes[s_idx:e_idx])
+            mask_frame = cs.point_in_polygon(self.points, cu_polygons)
             mask_tensor = cu2pt(mask_frame).view(mask_frame.shape).to(torch.bool)
             all_mask_tensor.append(mask_tensor)
         mask_tensor = torch.cat(all_mask_tensor, dim=1)
