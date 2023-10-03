@@ -72,7 +72,7 @@ RUN conda env config vars set LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/conda/envs/rapid
 # 		conda install  -y --override-channels -c conda-forge -c "nvidia/label/cuda-11.8.0" cuda-nvcc gxx_linux-64
 		# conda install  -y --override-channels -c conda-forge nvcc_linux-64
 USER root
-RUN chmod +xr /home/rapids/entrypoint.sh
+RUN chmod -R +xr /home/rapids
 # Setup user
 RUN export uid="${uid}" gid="${gid}" && \
     groupadd -g "${gid}" "${user}" && \
