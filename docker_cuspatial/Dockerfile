@@ -73,7 +73,7 @@ RUN conda env config vars set LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/conda/envs/rapid
 # 		conda install  -y --override-channels -c conda-forge -c "nvidia/label/cuda-11.8.0" cuda-nvcc gxx_linux-64
 		# conda install  -y --override-channels -c conda-forge nvcc_linux-64
 USER root
-COPY docker_cuspatial/entrypoint.sh /entrypoint.sh
+COPY entrypoint.sh /entrypoint.sh
 RUN chmod -R +xr /home/rapids /opt/conda/etc/profile.d/conda.sh /entrypoint.sh
 ENTRYPOINT [ "/entrypoint.sh" ]
 # Setup user
