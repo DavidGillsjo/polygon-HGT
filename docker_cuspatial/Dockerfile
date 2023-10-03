@@ -88,7 +88,8 @@ VOLUME /data
 VOLUME /host_home
 
 # Default powerline10k theme, no plugins installed
-RUN cd /tmp && sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.1/zsh-in-docker.sh)"
+WORKDIR /tmp
+RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.1/zsh-in-docker.sh)"
 
 WORKDIR /host_home
 CMD zsh
