@@ -1,16 +1,17 @@
-FROM rapidsai/rapidsai:cuda11.5-runtime-ubuntu20.04-py3.8
+FROM nvcr.io/nvidia/rapidsai/base:23.08-cuda11.8-py3.10
 
 # Arguments
 ARG user=pytorch
 ARG uid=1000
 ARG gid=1000
-ARG gpu_arch=sm_70
+ARG gpu_arch=sm_80
 
 ENV DEBIAN_FRONTEND noninteractive
 
+USER root
+
 # Install some dependencies
-RUN source activate rapids && \
-		apt-get update && apt-get install -y  \
+RUN apt-get update && apt-get install -y  \
     sudo\
 		build-essential\
 		gdb\
@@ -25,17 +26,16 @@ RUN source activate rapids && \
 # RUN pip3 install --upgrade pip &&\
 # 		pip3 install --no-cache-dir\
 
-# RUN source activate rapids && \
+# RUN conda activate rapids && \
 # 		conda config --set channel_priority true &&\
 # 		conda install --yes cudatoolkit=11.3
 
-# RUN source activate rapids && \
+# RUN conda activate rapids && \
 # 		CONDA_OVERRIDE_CUDA="11.3" conda install --yes --override-channels \
 # 		-c pytorch -c main\
 # 		pytorch=1.12.1  torchvision
-
-RUN source activate rapids && \
-		conda install -c fastai \
+USER rapids
+RUN conda install -c fastai \
 		opencv-python-headless \
 		tensorboard \
 		future \
@@ -60,21 +60,20 @@ RUN source activate rapids && \
 		wandb \
 		h5py
 
-RUN source activate rapids && \
-		pip3 install --no-cache-dir torch torchvision  --extra-index-url https://download.pytorch.org/whl/cu113
-RUN source activate rapids && \
-		pip3 install --no-cache-dir \
-	  torch-scatter torch-sparse torch-cluster torch-spline-conv torch-geometric -f https://data.pyg.org/whl/torch-1.12.0+cu113.html
+USER root
+RUN pip install torch==2.0.0+cu118 torchvision==0.15.1+cu118 --index-url https://download.pytorch.org/whl/cu118
+RUN pip3 install --no-cache-dir \
+	  torch-scatter torch-sparse torch-cluster torch-spline-conv torch-geometric -f https://data.pyg.org/whl/torch-2.0.0+cu118.html
+USER rapids
 
-RUN source activate rapids &&\
- 		conda env config vars set LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/conda/envs/rapids/lib
+RUN conda env config vars set LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/conda/envs/rapids/lib
 
-# RUN source activate rapids && \
-		# conda install  -y --override-channels -c conda-forge -c "nvidia/label/cuda-11.5.0" cuda-nvcc gxx_linux-64
+# RUN conda activate rapids && \
+# 		conda install  -y --override-channels -c conda-forge -c "nvidia/label/cuda-11.8.0" cuda-nvcc gxx_linux-64
 		# conda install  -y --override-channels -c conda-forge nvcc_linux-64
-
+RUN chmod +xr /home/rapids/entrypoint.sh
 # Setup user
-RUN source activate rapids && \
+RUN conda activate rapids && \
 		export uid="${uid}" gid="${gid}" && \
     groupadd -g "${gid}" "${user}" && \
     useradd -m -u "${uid}" -g "${user}" -s /bin/bash "${user}" && \
@@ -89,7 +88,7 @@ VOLUME /data
 VOLUME /host_home
 
 # Default powerline10k theme, no plugins installed
-RUN source activate rapids && sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.1/zsh-in-docker.sh)"
+RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.1/zsh-in-docker.sh)"
 
 WORKDIR /host_home
 CMD zsh
