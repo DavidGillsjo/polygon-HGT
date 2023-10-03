@@ -16,6 +16,7 @@ RUN apt-get update && apt-get install -y  \
 		build-essential\
 		gdb\
 		python3-dbg\
+		wget \
 		vim
 	# apt-get clean && \
 	# apt-get autoremove && \
@@ -88,7 +89,7 @@ VOLUME /data
 VOLUME /host_home
 
 # Default powerline10k theme, no plugins installed
-WORKDIR "~/"
+WORKDIR "/tmp"
 RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.1/zsh-in-docker.sh)"
 
 WORKDIR /host_home
