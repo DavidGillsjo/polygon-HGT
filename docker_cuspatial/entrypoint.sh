@@ -24,7 +24,11 @@ if [ "$EXTRA_PIP_PACKAGES" ]; then
 fi
 
 # Active conda envirnoment
-. /opt/conda/etc/profile.d/conda.sh; conda activate base
+source /opt/conda/etc/profile.d/conda.sh
+conda activate base
+
+# Set umask to enable host to read and write files
+umask 0027
 
 # Run whatever the user wants.
 if [ "${UNQUOTE}" = "true" ]; then
