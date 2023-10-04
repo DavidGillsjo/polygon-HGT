@@ -69,9 +69,8 @@ USER rapids
 
 RUN conda env config vars set LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/conda/envs/rapids/lib
 
-# RUN conda activate rapids && \
-# 		conda install  -y --override-channels -c conda-forge -c "nvidia/label/cuda-11.8.0" cuda-nvcc gxx_linux-64
-		# conda install  -y --override-channels -c conda-forge nvcc_linux-64
+RUN conda install  -y --override-channels -c conda-forge -c "nvidia/label/cuda-11.8.0" cuda-nvcc gxx_linux-64 && \
+	conda install  -y --override-channels -c conda-forge nvcc_linux-64
 # USER root
 # COPY docker_cuspatial/entrypoint.sh /entrypoint.sh
 # RUN chmod -R +xr /home/rapids /opt/conda/etc/profile.d/conda.sh /entrypoint.sh
@@ -95,5 +94,5 @@ VOLUME /host_home
 # WORKDIR "/tmp"
 # RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.1/zsh-in-docker.sh)"
 
-# WORKDIR /host_home
-# CMD zsh
+WORKDIR /host_home
+CMD bash
