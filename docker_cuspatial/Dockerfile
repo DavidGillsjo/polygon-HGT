@@ -17,6 +17,7 @@ RUN apt-get update && apt-get install -y  \
 		gdb\
 		python3-dbg\
 		wget \
+		cuda-toolkit-11-8 \
 		vim
 	# apt-get clean && \
 	# apt-get autoremove && \
@@ -36,7 +37,7 @@ RUN apt-get update && apt-get install -y  \
 # 		-c pytorch -c main\
 # 		pytorch=1.12.1  torchvision
 USER rapids
-RUN conda install -c fastai \
+RUN conda install -y -c fastai -c "nvidia/label/cuda-11.8.0" \
 		opencv-python-headless \
 		tensorboard \
 		future \
@@ -59,8 +60,8 @@ RUN conda install -c fastai \
 		networkx\
 		tqdm \
 		wandb \
-		h5py
-RUN conda install  -y -c "nvidia/label/cuda-11.8.0" cuda-toolkit
+		h5py \
+		cuda-toolkit
 
 USER root
 RUN pip install torch==2.0.0+cu118 torchvision==0.15.1+cu118 --index-url https://download.pytorch.org/whl/cu118
@@ -80,7 +81,7 @@ VOLUME /host_home
 
 # Default powerline10k theme, no plugins installed
 # WORKDIR "/tmp"
-RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.1/zsh-in-docker.sh)"
+#RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.1/zsh-in-docker.sh)"
 
 WORKDIR /host_home
 CMD bash
