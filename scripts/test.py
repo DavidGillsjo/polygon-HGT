@@ -172,7 +172,7 @@ class ModelTester:
     def _log_fig(self, fig, fname, epoch):
         if self.tb_logger is not None:
             self.tb_logger.add_figure(fname, fig, global_step=epoch, close=True)
-        if self.wandb_run is not None:
+        if not self.disable_wandb:
             fig.canvas.draw()
             image_from_plot = np.frombuffer(fig.canvas.tostring_rgb(), dtype=np.uint8)
             image_from_plot = image_from_plot.reshape(fig.canvas.get_width_height()[::-1] + (3,))
@@ -474,7 +474,7 @@ class ModelTester:
                     if fig:
                         self.tb_logger.add_figure('PR lines - {} - {}'.format(m_type,t), fig, global_step = epoch, close=True)
 
-                if self.wandb_run:
+                if not self.disable_wandb:
                     for ap_type, ap_score in sAP[m_type][t].items():
                         self.wandb_run.log({'sAP{} - {} - {}'.format(m_type, t, ap_type): ap_score,
                                             'epoch': epoch})
@@ -509,7 +509,7 @@ class ModelTester:
                     if fig:
                         self.tb_logger.add_figure('PR junctions - {} - {}'.format(m_type,t), fig, global_step = epoch, close=True)
 
-                if self.wandb_run:
+                if not self.disable_wandb:
                     for ap_type, ap_score in jAP[m_type][t].items():
                         self.wandb_run.log({'jAP{} - {} - {}'.format(m_type, t, ap_type): ap_score,
                                             'epoch': epoch})
@@ -540,7 +540,7 @@ class ModelTester:
                 if fig:
                     self.tb_logger.add_figure('PR plane centroids - {}'.format(t), fig, global_step = epoch, close=True)
 
-            if self.wandb_run:
+            if not self.disable_wandb:
                 for ap_type, ap_score in pcAP[t].items():
                     self.wandb_run.log({'pcAP{} - {}'.format(t, ap_type): ap_score,
                                         'epoch': epoch})
@@ -574,7 +574,7 @@ class ModelTester:
                 if fig:
                     self.tb_logger.add_figure('PR planes - {}'.format(t), fig, global_step = epoch, close=True)
 
-            if self.wandb_run:
+            if not self.disable_wandb:
                 for ap_type, ap_score in pAP[t].items():
                     self.wandb_run.log({'pAP{} - {}'.format(t, ap_type): ap_score,
                                         'epoch': epoch})
@@ -598,7 +598,7 @@ class ModelTester:
             self.tb_logger.add_scalar('LSUN_KP_{}'.format(thresholds[t_idx]), kp_error[t_idx], global_step = epoch)
             self.tb_logger.add_figure('LSUN KP', fig, global_step = epoch, close=True)
 
-        if self.wandb_run:
+        if not self.disable_wandb:
             self.wandb_run.log({'LSUN_KP_{}'.format(thresholds[t_idx]): kp_error[t_idx],
                                     'epoch': epoch})
             if fig:
@@ -625,7 +625,7 @@ class ModelTester:
                     room_result_table[t][metric] = value
         self._make_AP_latex_table({'room':room_result_table}, 'room',epoch)
 
-        if self.wandb_run:
+        if not self.disable_wandb:
             for t, t_res in room_result.items():
                 for metric, value in t_res.items():
                     try:

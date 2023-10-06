@@ -104,10 +104,12 @@ To run on a set of images
 cd scripts
 python3 test.py \
 --config-file ../config-files/Pred-simple-plane-S3D-GNN.yaml \
+--disable-wandb \
 --img-folder <my-image-folder> \
 CHECKPOINT ../data/model_joint_hgt.pth
+OUTPUT_DIR <my-image-folder>/output
 ```
-and the result will be placed in `<my-image-folder>/test`.
+and the result will be placed in `<my-image-folder>/output`.
 
 ## Train
 The different models are trained with their respective config file which exists in both simulated and joint prediction versions.
