@@ -28,7 +28,7 @@ source /opt/conda/etc/profile.d/conda.sh
 conda activate base
 
 # Set umask to enable host to read and write files
-umask 0027
+umask 0000
 
 # Run whatever the user wants.
 if [ "${UNQUOTE}" = "true" ]; then

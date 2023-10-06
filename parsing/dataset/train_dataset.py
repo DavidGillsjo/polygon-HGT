@@ -36,19 +36,19 @@ class TrainDataset(Dataset):
         ann = copy.deepcopy(self.annotations[idx])
         image = io.imread(osp.join(self.root,ann['filename'])).astype(float)[:,:,:3]
         for key,_type in (['junctions',np.float32],
-                          ['junctions_semantic',np.int3264],
-                          ['edges_positive',np.int3264],
-                          ['edges_negative',np.int3264],
-                          ['edges_semantic',np.int3264],
+                          ['junctions_semantic',np.int32],
+                          ['edges_positive',np.int32],
+                          ['edges_negative',np.int32],
+                          ['edges_semantic',np.int32],
                           ['camera_pose',np.float32]):
 
             ann[key] = np.array(ann[key],dtype=_type)
 
         for plane_type in ['planes', 'planes_negative']:
             for plane in ann[plane_type]:
-                for key,_type in (['junction_idx',np.int3264],
-                                  ['edge_idx',np.int3264],
-                                  ['semantic',np.int3264],
+                for key,_type in (['junction_idx',np.int32],
+                                  ['edge_idx',np.int32],
+                                  ['semantic',np.int32],
                                   ['centroid',np.float32]):
                     plane[key] = np.array(plane[key],dtype=_type)
 

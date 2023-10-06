@@ -86,7 +86,8 @@ To run on the test set, do
 cd scripts
 python3 test.py \
 --config-file ../config-files/Pred-plane-from-GT-GNN.yaml \
-CHECKPOINT ../data/model_sim_hgt.pth
+--disable-wandb \
+CHECKPOINT ../data/model_sim_hgt.pth \
 OUTPUT_DIR ../runs/test
 ```
 To run on the validation data, add the flag `--val`.
