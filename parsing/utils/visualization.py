@@ -151,7 +151,7 @@ class ImagePlotter:
             tmp_idx = np.flatnonzero(p_mask & (planes_labels==l))
             c = self.PLANE_COLORS[l]
             for p_idx in tmp_idx:
-                poly = junctions[np.array(planes[p_idx],dtype=np.int)]
+                poly = junctions[np.array(planes[p_idx],dtype=np.int32)]
                 self._add_polygon_patch(ax, poly, c,skip_hatch=skip_hatch)
 
     def _ax_plot_planes_centroids(self, ax, model_output, score_threshold):
@@ -246,7 +246,7 @@ class ImagePlotter:
             ax.axis('off')
 
             c = self.PLANE_COLORS[planes_labels[p_idx]]
-            poly = junctions[np.array(planes[p_idx],dtype=np.int)]
+            poly = junctions[np.array(planes[p_idx],dtype=np.int32)]
             self._add_polygon_patch(ax, poly, c, skip_hatch = True)
             ax.set_title(f'Score: {planes_scores[p_idx]:0.2f}')
 

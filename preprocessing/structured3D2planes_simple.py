@@ -174,7 +174,7 @@ def get_plane_annotation_from_S3D(image, layout_ann, camera_pose, scene_id=None)
             state  = J_ENUM['proper']
         out_junctions_semantic.append(state)
 
-    junction2edge = -np.ones([len(out_junctions),len(out_junctions)], dtype=np.int32)
+    junction2edge = -np.ones([len(out_junctions),len(out_junctions)], dtype=np.int3232)
     out_junctions_np = np.array(out_junctions)
     out_edges = []
 
@@ -502,7 +502,7 @@ if __name__ == '__main__':
     plt.close()
 
 
-    line_c = np.concatenate([np.array(a['edges_all_semantic'], dtype=np.int32) for a in ann])
+    line_c = np.concatenate([np.array(a['edges_all_semantic'], dtype=np.int3232) for a in ann])
 
     fig, ax = plt.subplots(2,1)
     stats_all_labels = compute_label_stats(line_c, LINE_CLASSES, ax=ax[0])
@@ -512,7 +512,7 @@ if __name__ == '__main__':
     with open(osp.join(args.out_dir, 'stats_all.yaml'), 'w') as f:
         yaml.safe_dump(stats_all_labels, f, default_flow_style=None)
 
-    line_c = np.concatenate([np.array(a['edges_semantic'], dtype=np.int32) for a in ann])
+    line_c = np.concatenate([np.array(a['edges_semantic'], dtype=np.int3232) for a in ann])
     stats_simple_labels = compute_label_stats(line_c,LINE_CLASSES, ax=ax[1])
 
     with open(osp.join(args.out_dir, 'stats_simple.yaml'), 'w') as f:

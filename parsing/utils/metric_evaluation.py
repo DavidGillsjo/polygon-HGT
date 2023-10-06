@@ -284,7 +284,7 @@ def evalulate_sap(result_list, annotations_dict, thresholds, labels):
         lines_gt[:,2]  *= 128/float(gt['width'])
         lines_gt[:,3]  *= 128/float(gt['height'])
 
-        labels_gt = np.array(gt['edges_semantic'], dtype=np.int)
+        labels_gt = np.array(gt['edges_semantic'], dtype=np.int32)
 
         for k, eval_type_meters in eval_meters.items():
             scores = np.array(res['lines_{}_score'.format(k)],dtype=np.float32)
@@ -338,24 +338,24 @@ def evalulate_jap(result_list, annotations_dict, thresholds, labels):
         juncs_gt[:,1] *= 128/float(res['height'])
 
         if 'junctions_semantic' in gt:
-            labels_gt = np.array(gt['junctions_semantic'],dtype=np.int)
+            labels_gt = np.array(gt['junctions_semantic'],dtype=np.int32)
         else:
             occluded = np.array(gt['junc_occluded'], dtype=np.bool)
-            labels_gt = np.zeros(occluded.shape, dtype=np.int)
+            labels_gt = np.zeros(occluded.shape, dtype=np.int32)
             labels_gt[occluded] = 1
             labels_gt[~occluded] = 2
 
         for k, eval_type_meters in eval_meters.items():
 
             if k == 'label':
-                labels = np.array(res['juncs_label'], dtype=np.int)
+                labels = np.array(res['juncs_label'], dtype=np.int32)
                 scores = np.array(res['juncs_label_score'])
                 for _, meter in eval_type_meters.items():
                     meter.update(juncs_pred, juncs_gt, scores, labels, labels_gt)
             elif k == 'label_line_valid' and 'edges_pred' in res:
                 scores = np.array(res['juncs_score'])
-                line_labels = np.array(res['lines_label'], dtype=np.int)
-                edges_pred = np.array(res['edges_pred'], dtype=np.int)
+                line_labels = np.array(res['lines_label'], dtype=np.int32)
+                edges_pred = np.array(res['edges_pred'], dtype=np.int32)
                 #Find junctions which lines are valid
                 valid_jidx = np.unique(edges_pred[line_labels > 0])
                 scores = scores[valid_jidx]
@@ -408,7 +408,7 @@ def evalulate_pcap(result_list, annotations_dict, thresholds, labels):
         centroids_gt[:,0] *= 128/float(res['width'])
         centroids_gt[:,1] *= 128/float(res['height'])
 
-        labels = np.array(res['pcentroid_label'], dtype=np.int)
+        labels = np.array(res['pcentroid_label'], dtype=np.int32)
         scores = np.array(res['pcentroid_label_score'])
         for _, meter in eval_meters.items():
             meter.update(pcentroid_pred, centroids_gt, scores, labels, labels_gt)
@@ -435,7 +435,7 @@ def evalulate_lsun_kp(result_list, annotations_dict, thresholds = np.linspace(0.
         gt = annotations_dict[filename]
         if len(res.get('lines_pred',[])) == 0:
             continue
-        edges = np.array(res['edges_pred'],dtype=np.int)
+        edges = np.array(res['edges_pred'],dtype=np.int32)
         junctions = np.array(res['juncs_pred'],dtype=np.float32)
         scores = np.array(res['lines_valid_score'],dtype=np.float32)
         junction_gt = np.array(gt['junctions'],dtype=np.float32)

@@ -330,10 +330,10 @@ class ModelTester:
             self._nms_remove(remove_mask, output)
 
     def _nms_graph(self, output, ax=None):
-        labels = np.array(output['lines_label'], dtype=np.int)
+        labels = np.array(output['lines_label'], dtype=np.int32)
         if labels.shape[0] < 2:
             return
-        line2junc_idx = np.array(output['line2junc_idx'], dtype=np.int)
+        line2junc_idx = np.array(output['line2junc_idx'], dtype=np.int32)
         edge2idx = {frozenset(edge):idx for idx,edge in enumerate(line2junc_idx.tolist())}
         if self.lm.nbr_line_labels()>2:
             graph_line2junc_idx = line2junc_idx[labels>0]
@@ -349,7 +349,7 @@ class ModelTester:
             junction_scores = np.array(output['juncs_score'])
             j_labels = np.argmax(junction_scores[:,1:], axis=1) + 1
         else:
-            j_labels = np.array(output['juncs_label'], dtype=np.int)
+            j_labels = np.array(output['juncs_label'], dtype=np.int32)
 
         score = np.array(output['lines_label_score'], dtype=np.float32)
         remove_mask = np.zeros(line2junc_idx.shape[0], dtype=np.bool)

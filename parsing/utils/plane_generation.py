@@ -730,7 +730,7 @@ def plot_result(junctions, edges, planes = [], desc = 'simple_geometry'):
         if isinstance(p, sg.Polygon):
             ax.add_patch(PolygonPatch(p,facecolor=c,edgecolor = c, alpha=0.5))
         else:
-            poly = junctions[np.array(p,dtype=np.int)]
+            poly = junctions[np.array(p,dtype=np.int32)]
             ax.add_patch(Polygon(poly,facecolor=c,edgecolor = c, alpha=0.5, closed=True))
 
 

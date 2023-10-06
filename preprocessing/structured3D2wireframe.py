@@ -816,14 +816,14 @@ def generate_negative_edges(image, junctions, pos_edges):
     for l_edge in pos_edges:
         lineset.add(frozenset(l_edge))
         e1,e2 = l_edge
-        jpos_int = scaled_junctions[l_edge,:].astype(np.int)
+        jpos_int = scaled_junctions[l_edge,:].astype(np.int32)
         rr, cc, value = skimage.draw.line_aa(*jpos_int[0,::-1], *jpos_int[1,::-1])
         lmap[rr, cc] = np.maximum(lmap[rr, cc], value)
 
     llmap = scipy.ndimage.zoom(lmap, [0.5, 0.5])
     for l_edge in combinations(range(scaled_junctions.shape[0]), 2):
         if frozenset(l_edge) not in lineset:
-            jpos_int = scaled_junctions[l_edge,:].astype(np.int)//2
+            jpos_int = scaled_junctions[l_edge,:].astype(np.int32)//2
             rr, cc, value = skimage.draw.line_aa(*jpos_int[0,::-1], *jpos_int[1,::-1])
             lneg.append([l_edge, np.average(np.minimum(value, llmap[rr, cc]))])
 
@@ -1095,7 +1095,7 @@ if __name__ == '__main__':
     nbr_images = len(ann)
     r = {}
     r['nbr_junctions'] = np.array([len(a['junctions']) for a in ann])
-    r['nbr_visible_junctions'] = np.array([(np.array(a['junctions_semantic'], dtype=np.int) == 1).sum() for a in ann])
+    r['nbr_visible_junctions'] = np.array([(np.array(a['junctions_semantic'], dtype=np.int32) == 1).sum() for a in ann])
     r['nbr_edges_pos'] = np.array([len(a['edges_positive']) for a in ann])
     r['nbr_edges_neg'] = np.array([len(a['edges_negative']) for a in ann])
 
@@ -1112,7 +1112,7 @@ if __name__ == '__main__':
     plt.close()
 
 
-    line_c = np.concatenate([np.array(a['edges_all_semantic'], dtype=np.int32) for a in ann])
+    line_c = np.concatenate([np.array(a['edges_all_semantic'], dtype=np.int3232) for a in ann])
 
     fig, ax = plt.subplots(2,1)
     stats_all_labels = compute_label_stats(line_c, ALL_SINGLE_LINE_CLASSES, ax=ax[0])
@@ -1122,7 +1122,7 @@ if __name__ == '__main__':
     with open(osp.join(args.out_dir, 'stats_all.yaml'), 'w') as f:
         yaml.safe_dump(stats_all_labels, f, default_flow_style=None)
 
-    line_c = np.concatenate([np.array(a['edges_semantic'], dtype=np.int32) for a in ann])
+    line_c = np.concatenate([np.array(a['edges_semantic'], dtype=np.int3232) for a in ann])
     stats_simple_labels = compute_label_stats(line_c, REDUCED_SINGLE_LINE_CLASSES, ax=ax[1])
 
     with open(osp.join(args.out_dir, 'stats_simple.yaml'), 'w') as f:

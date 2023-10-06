@@ -395,8 +395,8 @@ class QuadTreePolygon2MaskIoULossCUDA(Polygon2MaskIoULossCUDA):
         #Make mask
         mask_tensor = torch.zeros([self.points_x.size, poly_offsets.size], device = self.device, dtype=torch.bool)
         if not pnp_result.point_index.empty:
-            point_index = cu2pt(pnp_result.point_index.astype(np.int64))
-            polygon_index = cu2pt(pnp_result.polygon_index.astype(np.int64))
+            point_index = cu2pt(pnp_result.point_index.astype(np.int3264))
+            polygon_index = cu2pt(pnp_result.polygon_index.astype(np.int3264))
             mask_tensor[point_index, polygon_index] = True
 
         return mask_tensor

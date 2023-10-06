@@ -493,7 +493,7 @@ def get_door_stats(plane_list, planes_with_doors_idx, render_dir, debug_plot = F
 
                     # Door visible, sample from image
                     if not np.all(occluded_mask):
-                        sample_points_pix = sample_points_pix_h[:2,~occluded_mask].astype(np.int)
+                        sample_points_pix = sample_points_pix_h[:2,~occluded_mask].astype(np.int32)
                         sem_rgb = img[sample_points_pix[1],
                                      sample_points_pix[0]]
                         door_mask = np.all((sem_rgb==door_rgb) | (sem_rgb==curtain_rgb), axis=1)
