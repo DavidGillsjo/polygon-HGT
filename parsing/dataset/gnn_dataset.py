@@ -58,10 +58,10 @@ class Annotations:
         ann = self.annotations[idx]
         ann = deepcopy(ann)
         for key,_type in (['junctions',np.float32],
-                          ['junctions_semantic',np.long],
-                          ['edges_positive',np.long],
-                          ['edges_negative',np.long],
-                          ['edges_semantic',np.long]):
+                          ['junctions_semantic',np.int64],
+                          ['edges_positive',np.int64],
+                          ['edges_negative',np.int64],
+                          ['edges_semantic',np.int64]):
 
 
             ann[key] = np.array(ann[key],dtype=_type)
@@ -178,7 +178,7 @@ class WireframeGNNDataset(Dataset):
         line_coordinates = line_npz['line_coordinates']
         line_features = line_npz['line_features']
 
-        edge2idx_mat = -np.ones([N,N], dtype=np.long)
+        edge2idx_mat = -np.ones([N,N], dtype=np.int64)
         edge2idx_mat[junction_idx[:,0],junction_idx[:,1]] = np.arange(junction_idx.shape[0])
         edge2idx_mat[junction_idx[:,1],junction_idx[:,0]] = np.arange(junction_idx.shape[0])
 

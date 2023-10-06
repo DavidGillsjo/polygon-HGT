@@ -516,6 +516,7 @@ class PlaneClassifierGNN(PlaneClassifier):
         return output
 
 
+    #TODO: Done on CPU, probably one of the bottlenecks.
     def _find_minimum_average_weight_cycle(self, edges_pred, pscores, juncs_pred):
         if edges_pred.size(0) < 3:
             return False, None
@@ -565,6 +566,7 @@ class PlaneClassifierGNN(PlaneClassifier):
         plane_polygons = []
         plane_polygons_set = set()
         success_mask = torch.zeros(plane_line_logits.size(0), dtype=torch.bool)
+        juncs_pred_np = juncs_pred.to("cpu").numpy()
         for p_idx, pscores in enumerate(plane_line_score):
             p_mask = pscores>self.hgt_polygon_line_score_threshold
             if not p_mask.any():
@@ -591,7 +593,7 @@ class PlaneClassifierGNN(PlaneClassifier):
             #     ax.text(*text_pos, f'S{lscore:0.2f}', color='white', backgroundcolor='black')
 
             #DEBUG END
-            success, polygon = self._find_minimum_average_weight_cycle(edges_pred_reduced, pscores, juncs_pred)
+            success, polygon = self._find_minimum_average_weight_cycle(edges_pred_reduced, pscores, juncs_pred_np)
             success_mask[p_idx] = success
             if success:
                 polygon_set_entry = frozenset(polygon)

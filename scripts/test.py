@@ -104,9 +104,9 @@ class ModelTester:
     @property
     def datasets(self):
         if 'GNN' in self.cfg.MODEL.NAME.upper():
-            self.datasets = build_gnn_test_dataset(self.cfg, validation = self.validation)
+            return build_gnn_test_dataset(self.cfg, validation = self.validation)
         else:
-            self.datasets = build_test_dataset(self.cfg, validation = self.validation)
+            return build_test_dataset(self.cfg, validation = self.validation)
     
     def _init_model(self):
         if 'GNN' in self.cfg.MODEL.NAME.upper():

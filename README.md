@@ -85,8 +85,8 @@ To run on the test set, do
 ```
 cd scripts
 python3 test.py \
---config-file ../config/Pred-plane-from-GT-GNN.yaml \
-CHECKPOINT ../data/model_polygon_hgt_simulated.pth
+--config-file ../config-files/Pred-plane-from-GT-GNN.yaml \
+CHECKPOINT ../data/model_sim_hgt.pth
 OUTPUT_DIR ../runs/test
 ```
 To run on the validation data, add the flag `--val`.
@@ -98,7 +98,7 @@ cd scripts
 python3 test.py \
 --config-file ../config-files/Pred-simple-plane-S3D-GNN.yaml \
 --img-folder <my-image-folder> \
-CHECKPOINT ../data/model_polygon_hgt_joint.pth
+CHECKPOINT ../data/model_joint_hgt.pth
 ```
 and the result will be placed in `<my-image-folder>/test`.
 
