@@ -42,6 +42,12 @@ SUDO=1 ./build.sh
 SUDO=1 ./run.sh
 ```
 
+For any directory on your host that should be reachable through the mount `/host_home` you need to give full access to all users.
+I.e. if you place the repo at `~/polygon-HGT` on your host then you will want to run
+```
+sudo chmod o+xrw ~/polygon-HGT
+```
+
 If you have problems building you may use the uploaded dockerhub image by running
 ```
 cd docker_cuspatial

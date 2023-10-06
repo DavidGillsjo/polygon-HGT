@@ -160,9 +160,6 @@ class Polygon2MaskIoULossCUDA:
         points = torch.cat(points)
         ring_offsets = torch.tensor(ring_offsets, device = self.device) # Start Idx for each ring in the sequence
         poly_offsets = torch.arange(len(planes) + 1, device = self.device) # Assume each polygon has one ring.
-        print(points.shape, "points")
-        print(ring_offsets.shape, "ring_offsets")
-        print(poly_offsets.shape, "poly_offsets")
 
         return cs.GeoSeries.from_polygons_xy(
             pt2cu(points),
@@ -176,21 +173,15 @@ class Polygon2MaskIoULossCUDA:
         self.initialize(planes[0].device)
         # Batches of 31 are supported
         start_idx = range(0,len(planes),31)
-        print("nbr planes", len(planes))
         
         all_mask_tensor = []
         for s_idx in start_idx:
             e_idx = min(s_idx + 31, len(planes))
             cu_polygons = self._planes_to_vectors(planes[s_idx:e_idx])
-            print("cu polygons", cu_polygons.shape)
             mask_frame = cs.point_in_polygon(self.points, cu_polygons)
-            print("mask_frame", mask_frame.shape)
             mask_tensor = cu2pt(mask_frame).view(mask_frame.shape).to(torch.bool)
-            print("mask etnsor", mask_tensor.shape)
             all_mask_tensor.append(mask_tensor)
-        print(len(all_mask_tensor))
         mask_tensor = torch.cat(all_mask_tensor, dim=1)
-        print(mask_tensor.shape)
         assert mask_tensor.size(1) == len(planes)
         return mask_tensor
 
