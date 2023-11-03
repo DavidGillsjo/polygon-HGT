@@ -1,4 +1,4 @@
-FROM rapidsai/rapidsai:cuda11.5-runtime-ubuntu20.04-py3.8
+FROM rapidsai/rapidsai:22.12-cuda11.5-runtime-ubuntu20.04-py3.9
 
 # Arguments
 ARG user=pytorch
