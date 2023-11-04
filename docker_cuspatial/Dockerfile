@@ -1,4 +1,4 @@
-FROM rapidsai/rapidsai:22.12-cuda11.5-runtime-ubuntu20.04-py3.9
+FROM rapidsai/rapidsai:23.02-cuda11.8-runtime-ubuntu22.04-py3.10
 
 # Arguments
 ARG user=pytorch
@@ -11,10 +11,11 @@ ENV DEBIAN_FRONTEND noninteractive
 # Install some dependencies
 RUN source activate rapids && \
 		apt-get update && apt-get install -y  \
-    sudo\
+    	sudo\
 		build-essential\
 		gdb\
 		python3-dbg\
+		cuda-toolkit-11-8\
 		vim
 	# apt-get clean && \
 	# apt-get autoremove && \
@@ -61,17 +62,17 @@ RUN source activate rapids && \
 		h5py
 
 RUN source activate rapids && \
-		pip3 install --no-cache-dir torch torchvision  --extra-index-url https://download.pytorch.org/whl/cu113
+		pip3 install --no-cache-dir torch torchvision  --extra-index-url https://download.pytorch.org/whl/cu118
+
 RUN source activate rapids && \
-		pip3 install --no-cache-dir \
-	  torch-scatter torch-sparse torch-cluster torch-spline-conv torch-geometric -f https://data.pyg.org/whl/torch-1.12.0+cu113.html
+		pip3 install --no-cache-dir torch-sparse torch-cluster torch-spline-conv torch-geometric torch-scatter --extra-index-url https://download.pytorch.org/whl/cu118
 
 RUN source activate rapids &&\
  		conda env config vars set LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/conda/envs/rapids/lib
 
 # RUN source activate rapids && \
-		# conda install  -y --override-channels -c conda-forge -c "nvidia/label/cuda-11.5.0" cuda-nvcc gxx_linux-64
-		# conda install  -y --override-channels -c conda-forge nvcc_linux-64
+# 		conda install  -y --override-channels -c conda-forge -c "nvidia/label/cuda-11.5.0" cuda-nvcc gxx_linux-64
+# 		conda install  -y --override-channels -c conda-forge nvcc_linux-64
 
 # Setup user
 RUN source activate rapids && \
