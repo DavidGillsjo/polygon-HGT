@@ -59,19 +59,29 @@ RUN source activate rapids && \
 		networkx\
 		tqdm \
 		wandb \
-		h5py
+		h5py \
+		pytorch-cuda=11.8
 
 RUN source activate rapids && \
 		pip3 install --no-cache-dir torch torchvision  --extra-index-url https://download.pytorch.org/whl/cu118
 
-RUN source activate rapids && \
-		pip3 install --no-cache-dir torch-sparse torch-cluster torch-spline-conv torch-geometric torch-scatter --extra-index-url https://download.pytorch.org/whl/cu118
+#Alternative approach, seems promising to get compile possibilities.
+RUN  source activate rapids && \
+		 conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
 
-RUN source activate rapids &&\
- 		conda env config vars set LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/conda/envs/rapids/lib
+RUN  source activate rapids && \
+		 conda install pyg pytorch-scatter pytorch-spline-conv pytorch-cluster  -c pyg
 
 # RUN source activate rapids && \
-# 		conda install  -y --override-channels -c conda-forge -c "nvidia/label/cuda-11.5.0" cuda-nvcc gxx_linux-64
+# 		pip3 install --no-cache-dir torch-sparse torch-cluster torch-spline-conv torch-geometric torch-scatter --extra-index-url https://download.pytorch.org/whl/cu118
+#
+# RUN source activate rapids &&\
+#  		conda env config vars set LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/conda/envs/rapids/lib
+#
+RUN source activate rapids && \
+		conda install  -y -c "nvidia/label/cuda-11.8.0" cuda-nvcc
+		#conda install  -y --override-channels -c conda-forge -c "nvidia/label/cuda-11.8.0" cuda-nvcc gxx_linux-64
+# RUN source activate rapids && \
 # 		conda install  -y --override-channels -c conda-forge nvcc_linux-64
 
 # Setup user
