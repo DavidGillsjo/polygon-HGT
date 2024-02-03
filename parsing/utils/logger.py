@@ -73,8 +73,8 @@ def setup_noop_logger(name='noop'):
 
 #WANDB config here.
 # os.environ["WANDB_API_KEY"] = "<Insert your key>"
-project = "polygon-hgt"
-entity = "polygon-hgt"
+project = "semantic-room-wireframe"
+entity = "room-wireframe"
 
 # def wandb_init_from_output_dir(cfg,output_dir, disable_wandb=False):
 #     mode = 'disabled' if disable_wandb else 'online'
@@ -86,6 +86,10 @@ entity = "polygon-hgt"
 #     return wandb_run
 
 def wandb_init(cfg, checkpointer, resume=False, timestamp = '', disable_wandb = False):
+    # Do not init wandb if there is no API key
+    if "WANDB_API_KEY" not in os.environ:
+        disable_wandb = True
+    
     mode = 'disabled' if disable_wandb else 'online'
     if resume:
         wandb_run = _wandb_from_checkpoint(cfg, checkpointer, mode)
